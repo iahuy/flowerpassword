@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="ui-mobile">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><base href=".">
+		<title>花密手机版</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="text/javascript" src="./public/jquery-1.6.4.min.js"></script>
+		<script type="text/javascript" src="./public/jquery.mobile-1.0.min.js"></script>
+		<script type="text/javascript" src="./public/md5.js"></script>
+		<link rel="stylesheet" href="./public/jquery.mobile-1.0.min.css">
+		<link rel="stylesheet" href="./public/style.css">
+		<script type="text/javascript">
+
+			//页面载入后执行的内容
+			$( function() {
+
+				//监视内容改变
+				$( '#password' ).change( countCode );
+				$( '#key' ).change( countCode );
+				$( '#password' ).keyup( countCode );
+				$( '#key' ).keyup( countCode );
+
+			});
+
+			//生成密码
+			function countCode() {
+
+				var password = $( "#password" ).val();
+				var key = $( "#key" ).val();
+
+				if( password && key ) {
+					var md5one   = $.md5( password, key );
+					var md5two   = $.md5( md5one, 'snow' );
+					var md5three = $.md5( md5one, 'kise' );
+
+					//计算大小写
+					var rule   = md5three.split( "" );
+					var source = md5two.split( "" );
+
+					for( var i = 0 ; i <= 31 ; i++ ) { 
+						if( isNaN( source[i] )) {
+							str = "sunlovesnow1990090127xykab";
+							if( str.search( rule[ i ]) > -1 ) {
+								source[i] = source[i].toUpperCase();
+							}
+						}
+					}
+
+					var code32 = source.join( "" );
+					var code1  = code32.slice( 0, 1 );
+					if( isNaN( code1 )) {
+						var code16 = code32.slice( 0, 16 );
+					}
+					else {
+						var code16 = "K" + code32.slice( 1, 16 );
+					}
+					
+					$( "#code16" ).text( code16 );
+					$( "#code32" ).text( code32 );
+					$( "#code6" ).text( password );
+				}
+			}
+
+		</script>
+
+	</head>
+
+	<body class="ui-mobile-viewport">
+
+		<div data-role="page" tabindex="0" class="ui-page ui-body-c ui-page-active" style="min-height: 655px;">
+
+			<div data-role="header" class="ui-header ui-bar-a" role="banner">
+				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">花密手机版</h1>
+			</div>
+
+			<div data-role="content" class="ui-content" role="main">
+				<h2><span>1</span>输入</h2>
+
+				<div id="get">
+					<input type="password" name="password" id="password" value="" tabindex="1" placeholder="记忆密码：" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset">
+				</div>
+
+				<p id="jia">+</p>
+
+				<div id="get">
+					<input type="text" name="key" id="key" value="" tabindex="2" placeholder="区别代号：" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset">
+				</div>
+
+				<h2><span>2</span>获取</h2>
+
+				<div id="get">
+					<p id="tuijian">最终密码：<span id="code16" class="code16d">&nbsp;</span></p>
+				</div>
+
+
+				<p id="footer">Copyright © 2011-2012 &nbsp;&nbsp;&nbsp; FlowerPassword.com &nbsp;&nbsp;&nbsp; All rights reserved. developer:Kenshin <a href="http://flowerpassword.com/app/web" class="ui-link">访问电脑网页版</a></p>
+
+			</div>
+
+		</div>
+
+		<div class="ui-loader ui-body-a ui-corner-all" style="top: 349.5px;">
+			<span class="ui-icon ui-icon-loading spin"></span>
+			<h1>loading</h1>
+		</div>
+
+	</body>
+</html>
